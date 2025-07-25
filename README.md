@@ -71,6 +71,7 @@ Select an option to proceed!
 2. Pay Semester Fees
 3. Pay Hostel fees
 4. Exit(press 0)
+   
 🧑 Author
 Sashi Raghavendra
 GitHub: @sashiraghavendra
