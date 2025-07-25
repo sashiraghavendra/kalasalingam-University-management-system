@@ -1,0 +1,200 @@
+package KLU;
+
+import java.util.Scanner;
+import java.util.Random;
+
+public class Kalasalingam {
+
+    static long s_bal = 125000;
+    static int hostelType = 0;  // stores selected hostel type
+    static boolean hostelBooked = false;
+    static boolean hostelFeePaid = false;
+
+    static class Student {
+        String name;
+        String fath_name;
+        String num;
+        int course;
+        char gender;
+    }
+
+    static class Fees {
+        long creg;
+        long total, pay, paid;
+    }
+
+    static class Hostel {
+        int ch, mess, type;
+        long creg;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Random rand = new Random();
+        long reg = rand.nextInt(20229999 - 20221000 + 1) + 20221000;
+
+        System.out.println("Welcome to KALASALINGAM UNIVERSITY");
+        System.out.println("Select an option to proceed!");
+
+        while (true) {
+            System.out.println("\n\n1. Apply for B.Tech Online\n2. Pay Semester Fees\n3. Book Hostel\n4. Pay Hostel Fees\n5. Exit (press 0)");
+            int ch = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            switch (ch) {
+                case 1:
+                    apply(sc);
+                    System.out.println("\nYour admission number is " + reg);
+                    break;
+                case 2:
+                    paySemesterFees(sc, reg);
+                    break;
+                case 3:
+                    bookHostel(sc, reg);
+                    break;
+                case 4:
+                    payHostelFees(sc, reg);
+                    break;
+                case 0:
+                    System.out.println("Exiting... Thank you!");
+                    return;
+                default:
+                    System.out.println("Invalid input.");
+            }
+        }
+    }
+
+    public static void apply(Scanner sc) {
+        Student s = new Student();
+        System.out.println("Select a course to apply: ");
+        System.out.println("1. CSE\n2. ECE\n3. IT\n4. EEE\n5. MECH\n6. CIVIL\n7. BIO TECH\n8. FOOD TECH");
+        s.course = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Enter your name (in block letters): ");
+        s.name = sc.nextLine();
+
+        System.out.print("Enter your gender (M/F): ");
+        s.gender = sc.next().charAt(0);
+        sc.nextLine();
+
+        System.out.print("Enter your father name: ");
+        s.fath_name = sc.nextLine();
+
+        System.out.print("Enter your mobile number: ");
+        s.num = sc.next();
+
+        System.out.println("\n✅ You have successfully registered.\n");
+        System.out.println("STUDENT DETAILS");
+        System.out.println("Name: " + s.name);
+        System.out.println("Gender: " + (s.gender == 'M' || s.gender == 'm' ? "Male" : "Female"));
+        System.out.println("Father Name: " + s.fath_name);
+        System.out.println("Mobile Number: " + s.num);
+        System.out.print("Course: ");
+        switch (s.course) {
+            case 1: System.out.println("CSE"); break;
+            case 2: System.out.println("ECE"); break;
+            case 3: System.out.println("IT"); break;
+            case 4: System.out.println("EEE"); break;
+            case 5: System.out.println("Mechanical"); break;
+            case 6: System.out.println("Civil"); break;
+            case 7: System.out.println("Bio Tech"); break;
+            case 8: System.out.println("Food Tech"); break;
+            default: System.out.println("Invalid Course");
+        }
+    }
+
+    public static void paySemesterFees(Scanner sc, long reg) {
+        Fees f = new Fees();
+        f.total = 125000;
+        f.paid = 0;
+
+        System.out.print("Enter your reg number to pay semester fees: ");
+        f.creg = sc.nextLong();
+
+        if (f.creg == reg) {
+            System.out.println("\n--- Semester Fee Payment ---");
+            System.out.println("Total Fees : ₹" + f.total);
+            System.out.println("Balance    : ₹" + s_bal);
+            System.out.print("Enter amount to pay: ");
+            f.pay = sc.nextLong();
+
+            if (f.pay <= s_bal) {
+                f.paid += f.pay;
+                s_bal -= f.paid;
+                System.out.println("✅ Semester fee paid: ₹" + f.paid);
+                System.out.println("Remaining Balance: ₹" + s_bal);
+            } else {
+                System.out.println("❌ Insufficient balance to pay this amount.");
+            }
+        } else {
+            System.out.println("❌ Invalid registration number.");
+        }
+    }
+
+    public static void bookHostel(Scanner sc, long reg) {
+        Hostel h = new Hostel();
+        System.out.print("Enter your registration number: ");
+        h.creg = sc.nextLong();
+
+        if (h.creg == reg) {
+            System.out.println("\nSelect a hostel to book:");
+            System.out.println("1. Annexure 5 shared");
+            System.out.println("2. Non attached 4 shared");
+            System.out.println("3. Attached 4 shared");
+            System.out.println("4. AC Non attached 4 shared");
+            System.out.println("5. AC attached");
+
+            hostelType = sc.nextInt(); // store hostel type
+            hostelBooked = true;
+
+            System.out.println("Select mess type:\n1. South Indian\n2. North Indian");
+            h.mess = sc.nextInt();
+
+            System.out.println("Select diet:\n1. Vegetarian\n2. Non-Vegetarian");
+            h.type = sc.nextInt();
+
+            System.out.println("\n✅ Hostel booking recorded (without payment). Please pay separately via 'Pay Hostel Fees'.");
+        } else {
+            System.out.println("❌ Invalid registration number.");
+        }
+    }
+
+    public static void payHostelFees(Scanner sc, long reg) {
+        System.out.print("Enter your registration number to pay hostel fee: ");
+        long inputReg = sc.nextLong();
+
+        if (inputReg == reg && hostelBooked) {
+            long hostelFee = 0;
+
+            switch (hostelType) {
+                case 1: hostelFee = 59500; break;
+                case 2: hostelFee = 64500; break;
+                case 3: hostelFee = 74500; break;
+                case 4: hostelFee = 83500; break;
+                case 5: hostelFee = 97500; break;
+                default:
+                    System.out.println("❌ Invalid hostel type selected.");
+                    return;
+            }
+
+            if (hostelFeePaid) {
+                System.out.println("⚠️ Hostel fee already paid.");
+                return;
+            }
+
+            if (s_bal >= hostelFee) {
+                s_bal -= hostelFee;
+                hostelFeePaid = true;
+                System.out.println("\n✅ Hostel fee paid: ₹" + hostelFee);
+                System.out.println("Remaining balance: ₹" + s_bal);
+            } else {
+                System.out.println("❌ Not enough balance. Required: ₹" + hostelFee + ", Available: ₹" + s_bal);
+            }
+        } else if (!hostelBooked) {
+            System.out.println("⚠️ No hostel booking found. Please book hostel first.");
+        } else {
+            System.out.println("❌ Invalid registration number.");
+        }
+    }
+}
